@@ -1,6 +1,11 @@
 "use client"
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
+import { FaFacebookF, FaTwitter, FaLinkedin, FaInstagram } from 'react-icons/fa';
+
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
+
+
 const theme = {
   primary: '#1F1F1F',       // Black for main text
   secondary: '#F4D03F',     // Refined yellow accents
@@ -114,7 +119,7 @@ const FAQItem = ({ faq }) => (
 );
 
 const Footer = () => (
-  <footer className="w-full py-12 bg-gray-800 text-gray-200">
+  <footer className="w-full py-12 bg-gray-800 text-gray-200 mt-auto">
     <div className="max-w-6xl mx-auto px-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div>
@@ -135,10 +140,10 @@ const Footer = () => (
         <div>
           <h3 className="text-xl font-semibold text-yellow-400 mb-4">Stay Connected</h3>
           <div className="flex space-x-4">
-            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><i className="fab fa-facebook-f"></i></a>
-            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><i className="fab fa-twitter"></i></a>
-            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><i className="fab fa-linkedin"></i></a>
-            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><i className="fab fa-instagram"></i></a>
+           
+            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><FaTwitter /></a>
+            <a href="#" className="text-gray-400 hover:text-yellow-400 text-xl transition"><FaLinkedin /></a>
+            
           </div>
           <p className="mt-4 text-sm text-gray-400">Email: support@getbotyfied.com</p>
         </div>
@@ -190,31 +195,134 @@ const PricingSection = () => (
   </motion.section>
 );
 
-const Navbar = () => (
-  <motion.nav 
-    className="flex justify-between items-center w-full max-w-6xl mx-auto px-8 py-4 fixed top-0 bg-white z-50 shadow-md rounded-full"
-    initial={{ y: -100, rotateX: -30 }}
-    animate={{ y: 3, rotateX: 0 }}
-    transition={{ type: "spring", stiffness: 120 }}
-    style={{ 
-      perspective: '2000px',
-      transformStyle: 'preserve-3d',
-      backfaceVisibility: 'hidden'
-    }}
-  >
-    <div className="text-3xl font-bold" style={{ color: theme.primary, transform: 'translateZ(40px)' }}>GetBotyfied</div>
-    <div className="space-x-8 text-lg">
-      <motion.a href="#features" className="text-black hover:text-yellow-400 transition-all" whileHover={{ scale: 1.15, rotateY: 15, z: 30 }}>Features</motion.a>
-      <motion.a href="#pricing" className="text-black hover:text-yellow-400 transition-all" whileHover={{ scale: 1.15, rotateY: 15, z: 30 }}>Pricing</motion.a>
-      <motion.a href="#testimonials" className="text-black hover:text-yellow-400 transition-all" whileHover={{ scale: 1.15, rotateY: 15, z: 30 }}>Testimonials</motion.a>
-      <motion.a href="#faq" className="text-black hover:text-yellow-400 transition-all" whileHover={{ scale: 1.15, rotateY: 15, z: 30 }}>FAQ</motion.a>
-    </div>
-  </motion.nav>
-);
+const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const links = ["Features", "Pricing", "Testimonials", "FAQ"];
+  const menuVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  return (
+    <nav className="fixed top-0 left-0 w-full bg-white shadow-md z-50 lg:rounded-b-3xl">
+      {/* Navbar Container */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center h-16 lg:h-20">
+        {/* Logo */}
+        <div className="text-3xl font-bold text-gray-800">
+          <a href="/" aria-label="Homepage">
+            GetBotyfied
+          </a>
+        </div>
+
+        {/* Desktop Links */}
+        <div className="hidden lg:flex items-center space-x-10">
+          {links.map((item) => (
+            <a
+              key={item}
+              href={`#${item.toLowerCase()}`}
+              className="relative text-gray-800 hover:text-yellow-400 font-medium transition duration-200 group"
+            >
+              {item}
+              <span className="absolute left-0 bottom-[-2px] w-0 h-[2px] bg-yellow-400 group-hover:w-full transition-all duration-300"></span>
+            </a>
+          ))}
+          <a
+            href="#get-started"
+            className="bg-yellow-400 hover:bg-yellow-500 text-white px-5 py-2 rounded-full shadow-md font-bold transition duration-200"
+          >
+            Get Started
+          </a>
+        </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMenuOpen(true)}
+          className="lg:hidden flex items-center text-gray-800 focus:outline-none"
+          aria-label="Open Menu"
+        >
+          <AiOutlineMenu size={28} />
+        </button>
+      </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {menuOpen && (
+          <>
+            {/* Overlay */}
+            <motion.div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setMenuOpen(false)}
+            ></motion.div>
+
+            {/* Slide-In Menu */}
+            <motion.div
+              className="fixed inset-y-0 right-0 w-4/5 max-w-sm bg-white shadow-lg z-50 flex flex-col items-center space-y-8 py-8 px-6"
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", stiffness: 90 }}
+            >
+              {/* Close Button */}
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="self-end text-2xl text-gray-800 focus:outline-none"
+                aria-label="Close Menu"
+              >
+                <AiOutlineClose />
+              </button>
+
+              {/* Links */}
+              <motion.div
+                className="flex flex-col items-center space-y-6"
+                initial="hidden"
+                animate="visible"
+                exit="hidden"
+                variants={{
+                  hidden: { opacity: 0, y: 20 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { staggerChildren: 0.1 },
+                  },
+                }}
+              >
+                {links.map((item) => (
+                  <motion.a
+                    key={item}
+                    href={`#${item.toLowerCase()}`}
+                    className="text-lg text-gray-800 hover:text-yellow-400 font-medium"
+                    variants={menuVariants}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    {item}
+                  </motion.a>
+                ))}
+                <motion.a
+                  href="#get-started"
+                  className="bg-yellow-400 hover:bg-yellow-500 text-white px-6 py-3 rounded-full shadow-md font-bold transition duration-200"
+                  variants={menuVariants}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Get Started
+                </motion.a>
+              </motion.div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </nav>
+  );
+};
+
+
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen relative flex flex-col items-center space-y-16 pt-24 pb-24" style={{ backgroundColor: theme.background }}>
+    <div className="min-h-screen flex flex-col items-center space-y-16 pt-24 pb-24" style={{ backgroundColor: theme.background }}>
       <div className="absolute inset-0 overflow-hidden" style={{ 
         backgroundImage: `
           linear-gradient(rgba(254, 249, 231, 0.97), rgba(254, 249, 231, 0.97)),
